@@ -1,7 +1,7 @@
 Graph2Tree-RAG (GTRAG)
 
 
-########### Pipeline ###########
+## Pipeline ##
 
 GTRAG has three stages:
 
