@@ -10,7 +10,7 @@ GTRAG has three stages:
 3. **Answer generation:** bottom-up recursive generation over the tree.
 
 
-########### Repository layout ###########
+## Repository layout ##
 
 ```
 <repo>/
@@ -28,7 +28,7 @@ GTRAG has three stages:
 ```
 
 
-########### Setup ###########
+## Setup ##
 
 ```bash
 pip install -r requirements.txt
@@ -48,7 +48,7 @@ export OPENAI_API_KEY=...   # only if llm.backend=openai (or the judge / a basel
 ```
 
 
-########### Quick start ###########
+## Quick start ##
 
 ```bash
 # 1-2. build the knowledge graph and the vector indexes for one dataset
@@ -70,7 +70,7 @@ error). Every prompt is a text file in `prompts/`; `{{name}}` marks a value fill
 byte for byte, so a trailing newline added by an editor becomes part of the prompt.
 
 
-########### Data ###########
+## Data ##
 
 We use the same 1,000-question samples and retrieval corpora as HippoRAG for MuSiQue, HotpotQA, and 2WikiMultihopQA. Open-ended QA uses TraCR, QA-Expert-multi-hop-qa-V1.0, and MultiHop-RAG (500-query random samples for the latter two, seed `<SEED>`).
 
@@ -89,7 +89,7 @@ so switching dataset is just a different config: `bash scripts/build_kg.sh confi
 Dataset licenses and download sources: `<LINKS OR CITATIONS>`.
 
 
-########### Hyperparameters ###########
+## Hyperparameters ##
 
 All values live in `configs/default.yaml`; the default ones are:
 
@@ -104,7 +104,7 @@ All values live in `configs/default.yaml`; the default ones are:
 | Decoding (`llm`, `inference`) | greedy, at most 1024 new tokens |
 
 
-########### Prompts ###########
+## Prompts ##
 
 All prompts are in `prompts/`:
 
@@ -122,7 +122,7 @@ All prompts are in `prompts/`:
 | `llm_judge.txt` | open-ended evaluation (4 dimensions); added together with the evaluation script |
 
 
-########### Notes ###########
+## Notes ##
 
 - Results can vary slightly with LLM version and serving stack; temperature is 0 for all generation.
 - Knowledge-graph construction is run once per corpus; `<COST NOTE: tokens / time>`.
