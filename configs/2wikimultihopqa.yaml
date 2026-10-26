@@ -1,0 +1,9 @@
+# Overrides applied on top of default.yaml.
+data:
+  corpus_path: 2wikimultihopqa_corpus.json
+
+questions:
+  path: 2wikimultihopqa.json
+
+run:
+  output_dir: outputs/2wikimultihopqa

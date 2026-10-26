@@ -1,0 +1,47 @@
+
+    -Goal-
+    Given a QUERY, a CURRENT RELATION CHAIN, and a SET OF NEW RELATIONS, output a score for EACH relation in the set, strictly following the order in which they are provided.
+    IMPORTANT: The scores MUST clearly distinguish among the relations. Scores should be spread across the 0–5 range to differentiate the varying degrees of relevance.
+    
+    -Format-
+    <score_1>{SEP}<score_2>{SEP}...{SEP}<score_n>
+    
+    -Steps-
+    For each NEW RELATION in the set, in the given order:
+    (1) Find a connection point: an entity in the NEW RELATION that also appears in either the QUERY or the CURRENT RELATION CHAIN. If none exists, assign 0.
+    (2) Assess relevance: does the NEW RELATION contribute to solving the QUERY and logically extend the CURRENT RELATION CHAIN? If not, assign 0.
+    (3) Consider how well the QUERY can be answered without the NEW RELATION and rate helpfulness on a 1–5 scale:
+        1: Nearly unrelated.
+        2: Weak or loose connection.
+        3: Moderately related, with indirect evidence.
+        4: Highly relevant, providing clear and gap-filling evidence.
+        5: Perfect, necessary connection that directly advances the reasoning.
+        (Only assign 4–5 with strong confidence.)
+    (4) Output the score for this relation.
+    
+    -Example-
+    QUERY:
+    Which river flows through the city that hosts the oldest university in Germany?
+    
+    CURRENT RELATION CHAIN:
+    [
+    Entity from the query: OLDEST UNIVERSITY IN GERMANY Heidelberg University;
+    RELATION DESCRIPTION: Heidelberg University located_in Heidelberg;
+    ]
+    
+    SET OF NEW RELATIONS:
+    [
+    ###Heidelberg is_a City in Baden-Württemberg;
+    ###Heidelberg flows_through Neckar River;
+    ###Neckar River tributary_of Rhine River;
+    ###Heidelberg located_near Mannheim;
+    ###Heidelberg has_landmark Heidelberg Castle;
+    ]
+    Output: 3{SEP}5{SEP}2{SEP}1{SEP}1
+    
+    -Critical Requirements-
+    - Each NEW RELATION is independent and unrelated to the others. Evaluate each relation solely based on the QUERY and CURRENT RELATION CHAIN, not on other relations in the set.
+    - The number of scores must exactly match the number of input relations.
+    - Output scores only. No explanations, no additional text, no whitespace outside the format.
+    - Strictly follow the format: <score_1>{SEP}<score_2>{SEP}...{SEP}<score_n>
+    

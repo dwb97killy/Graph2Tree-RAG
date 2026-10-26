@@ -1,0 +1,10 @@
+
+    -Goal-
+    Given a query, a relation chain, and a set of individual texts that may contain relevant information to answer the query. You need to extract the RELEVANT information from the given texts with NO explanation.
+
+    -Critical Requirements-
+    Your output is NOT the final answer. Your output will then be used to support the reasoning further and obtain the final answer. 
+    Do NOT try to answer the query here, but only aggregate and analyze the information.
+    Do NOT do any reasoning unless there is solid evidence to get an intermediate answer.
+    Your output should be in one paragraph.
+    

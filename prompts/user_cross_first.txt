@@ -1,0 +1,6 @@
+***Query***: 
+{{query}}
+***QUERY ENTITIES***:
+{{query_entities}}
+***Text***: 
+{{text}}

@@ -1,0 +1,14 @@
+# Open-ended QA on TraCR. Set data.corpus_path and questions.path to your local copies.
+data:
+  corpus_path: null
+
+questions:
+  source: csv
+  path: null                           # "LLM Training Prompts and Answers.csv"
+  csv_column: 3                        # column holding the question; rows whose first cell is q_id are skipped
+
+generation:
+  answer_mode: open
+
+run:
+  output_dir: outputs/tracr

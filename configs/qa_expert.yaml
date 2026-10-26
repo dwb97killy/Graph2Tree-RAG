@@ -1,0 +1,13 @@
+# Open-ended QA (free-form answers, judged by an LLM). Set data.corpus_path to your corpus file.
+data:
+  corpus_path: null
+
+questions:
+  path: qa-expert-multi-hop-qa-V1/sample_question.json
+  field: null                          # the file is a plain list of question strings
+
+generation:
+  answer_mode: open
+
+run:
+  output_dir: outputs/qa-expert-multi-hop-qa-V1

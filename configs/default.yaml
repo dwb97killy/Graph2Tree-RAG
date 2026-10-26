@@ -1,0 +1,145 @@
+# Default configuration. Values can be overridden by a dataset YAML
+# (e.g. configs/hotpotqa.yaml) or on the command line:
+#   python -m gtrag.kg_construction --config configs/hotpotqa.yaml --set chunking.chunk_size=1000
+
+# ---------------------------------------------------------------- LLM
+llm:
+  backend: hf             # hf = local Hugging Face model | openai = any OpenAI-compatible API
+
+  # ---- backend: hf (local model)
+  model_path: null        # REQUIRED for hf: HF id or local path of the instruct model
+  tokenizer_path: null    # null -> same as model_path
+  torch_dtype: null       # null = library default (float32, as in the original script); e.g. bfloat16
+  do_sample: false        # greedy decoding
+  temperature: 0.1        # ignored while do_sample is false
+  top_p: 0.9              # ignored while do_sample is false
+
+  # ---- backend: openai (API)
+  api:
+    model: null           # REQUIRED for openai: model name offered by the provider
+    base_url: null        # null = OpenAI default; set for vLLM / Together / other compatible servers
+    api_key_env: OPENAI_API_KEY   # name of the environment variable holding the key
+    temperature: 0        # 0 ~ greedy
+    top_p: 1.0
+    max_tokens_param: max_tokens  # some newer OpenAI models require max_completion_tokens
+    max_retries: 5        # transient errors only (rate limit, timeout, connection, 5xx)
+    retry_wait_seconds: 5 # doubled after each failed attempt
+
+  # ---- both backends
+  max_new_tokens: 2048
+
+# ---------------------------------------------------------------- embeddings
+embedding:
+  model: nomic-ai/nomic-embed-text-v1
+  trust_remote_code: true
+  dim: 768                # must match the embedding model (FAISS IndexFlatIP size)
+  normalize: false        # true -> L2-normalised vectors, so inner product == cosine similarity (changes results)
+
+# ---------------------------------------------------------------- chunking
+chunking:
+  chunk_size: 2000        # characters (RecursiveCharacterTextSplitter)
+  chunk_overlap: 500      # characters
+
+# ---------------------------------------------------------------- KG extraction
+kg_extraction:
+  loop_num: 0                    # extra "gleaning" rounds per chunk (0 = off)
+  retry_on_format_error: true    # one retry if nothing could be parsed from the reply
+
+# ---------------------------------------------------------------- entity embedding (step 2)
+kg_embedding:
+  batch_size: 1           # 1 = one entity per encode() call, as in the original script; larger is faster
+  key_parser: legacy      # legacy = original parsing of "('NAME', 'TYPE')" | literal_eval = exact (see kg_embedding.py)
+
+# ---------------------------------------------------------------- data / run
+data:
+  corpus_path: null       # JSON list of {"text": ...}; set in configs/<dataset>.yaml
+  text_field: text
+  title_field: title      # per-document title stored for every chunk (chunk_title.json); null = skip
+
+run:
+  resume: false           # continue from the files already in output_dir
+  save_every: 1           # save after every N documents
+  verbose: true           # print every parsed record
+  output_dir: outputs
+
+outputs:                  # file names inside run.output_dir
+  faiss_index: faiss_index
+  chunks: faiss_document.json
+  entities: all_entities.json
+  relations: all_relations.json
+  processed_docs: processed_file.json
+  processed_entities: processed_entity.json
+  sample_question: sample_question.json
+  sample_answer: sample_answer.json
+  chunk_titles: chunk_title.json
+  entity_faiss_index: entity_faiss_index   # step 2
+  entity_document: entity_document.json    # step 2
+
+# ---------------------------------------------------------------- prompts
+prompts:
+  dir: prompts            # relative to the repository root
+  # The prompt files contain {name} placeholders for these delimiters, and the
+  # parser splits the LLM reply with the same values. The original script used
+  # the literal placeholder strings themselves as delimiters (the model copies
+  # them). Change them here and prompts + parsing stay consistent.
+  delimiters:
+    begin_delimiter: "{begin_delimiter}"
+    tuple_delimiter: "{tuple_delimiter}"
+    record_delimiter: "{record_delimiter}"
+    completion_delimiter: "{completion_delimiter}"
+    # delimiters of the retrieval prompts (relation scores / cross-chunk relations)
+    SEP: "{SEP}"
+    BEG: "{BEG}"
+    END: "{END}"
+    RECORD_SEP: "{RECORD_SEP}"
+
+# ================================================================
+# Question answering (python -m gtrag.answer). Defaults reproduce GTRAG.py as
+# released; every value that was a constant in that script is listed here.
+# ================================================================
+inference:
+  max_new_tokens: 1024     # replaces llm.max_new_tokens in this stage (GTRAG.py used 1024)
+
+questions:
+  source: json             # json | csv | hf
+  path: null               # json / csv file
+  field: question          # json: key of the question in each record (null = records are plain strings)
+  csv_column: 3            # csv: column holding the question
+  csv_skip_header_value: q_id   # csv: skip rows whose first cell equals this
+  hf_name: null            # hf: dataset id, e.g. yixuantt/MultiHopRAG
+  hf_config: null
+  hf_split: train
+  hf_field: query
+  limit: null              # use only the first N questions (null = all)
+
+query_extraction:
+  loop_num: 0              # extra "did you miss entities?" rounds (0 = off, as in GTRAG.py)
+  max_format_retries: 10   # GTRAG.py retried forever; stop after this many malformed replies
+  pool_size: 50            # nearest entities fetched per query entity (MAX_SIMILAR_ENTITY)
+  always_keep: 5           # the closest N are always kept ...
+  similarity_threshold: 0.90   # ... further ones only if inner product >= this (SIMI_ST)
+
+retrieval:
+  max_hop: 2               # depth of the chunk tree (MAX_HOP)
+  kg_neighbors_per_node: 1       # chunks added per node through KG relations (MAX_NEIGHBOR)
+  cross_neighbors_per_node: 1    # chunks added per node through cross-relation exploration (MAX_ACROSS_NEIGHBOR)
+  semantic_candidates: 10        # top-k chunks recalled by embedding as cross-exploration candidates
+  entity_matching_only: false    # ablation: ignore relations, rank chunks by entity-text similarity
+  fix_relation_source: false     # false = reproduce GTRAG.py, which stores the last entity of the
+                                 # node as "source" of every retrieved relation (see README)
+
+relation_pruning:
+  use_llm: false           # false = cosine similarity with the query/relation chain, true = LLM scores 0-5
+  batch_size: 10           # relations scored per call / per batch
+  top_k_per_batch: 5       # at most this many relations survive per batch
+  min_score_cosine: 0.5    # keep threshold when use_llm is false
+  min_score_llm: 3         # keep threshold when use_llm is true
+  max_format_retries: 3    # re-asks after a malformed or wrong-length score list
+
+cross_exploration:
+  max_format_retries: 3
+
+generation:
+  answer_mode: short       # short = HotpotQA/2Wiki/MuSiQue style (answer between delimiters) | open = free-form
+  max_format_retries: 3    # re-asks when the answer delimiters are missing
+  also_flat: true          # also answer from all retrieved chunks concatenated (flat baseline, answer_record_rag.json)

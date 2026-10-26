@@ -1,0 +1,3 @@
+The number of scores in your answer is {{n_scores}}, which does not match the number of input relations. Please modify your previous answer and output a new answer to match the requirment. Output scores only. No explanations, no additional text, no whitespace outside the format.
+Note: There are {{n_relations}} new relations in the set. So your output should contain exact {{n_relations}} scores
+

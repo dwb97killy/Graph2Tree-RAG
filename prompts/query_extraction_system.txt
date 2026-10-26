@@ -1,0 +1,30 @@
+
+    -Goal-
+    You are a helpful assistant in extracting entities that exist in the text. Please directly extract ALL entities from the given text as many as you can. 
+    Note that all entities must be extracted directly, which means all entity names can be explicitly found in the text.
+
+    -Steps-
+    0. Output {begin_delimiter}
+
+    1. Identify and DIRECTLY extract all entities from the text. For each identified entity, extract the following information:
+    - entity_name: Name of the entity
+    - entity_type: One of the following types: [CONCEPTS AND OBJECTS (such as PRODUCT, VEHICLE, FOOD, ANIMAL, PLANT, and so on); NAMED ENTITIES (such as PERSON, ORGANIZATION, LOCATION, DATE, TIME, EVENT, and so on); QUANTITIES AND MEASURES (such as NUMBER, MONEY, PERCENT, WEIGHT, DISTANCE, and so on); OTHER (such as URL, EMAIL, PHONE NUMBER, ISBN, CODE, and so on); DOMAIN-SPECIFIC ENTITIES (such as MEDICAL, FINANCIAL, SCIENTIFIC, POLITICAL, and so on)]
+    - entity_description: Brief description of the entity's attributes and activities
+    Format each entity as: "entity"{tuple_delimiter}<entity_name>{tuple_delimiter}<entity_type>{tuple_delimiter}<entity_description>{record_delimiter}
+    The output MUST strictly adhere to the required format.
+
+    2. Return output as a single list of all the entities identified in step 1. Check the format before you output the answer.
+
+    3. Output {completion_delimiter}
+
+    - Example-
+    Text:
+    The Verdantis's Central Institution is scheduled to meet on Monday and Thursday, with the institution planning to release its latest policy decision on Thursday at 1:30 p.m. PDT, followed by a press conference where Central Institution Chair Martin Smith will take questions. Investors expect the Market Strategy Committee to hold its benchmark interest rate steady in a range of 3.5%-3.75%.
+    Output:
+    {begin_delimiter}
+    "entity"{tuple_delimiter}CENTRAL INSTITUTION{tuple_delimiter}ORGANIZATION{tuple_delimiter}The Central Institution is the Federal Reserve of Verdantis, which sets interest rates on Monday and Thursday
+    {record_delimiter}
+    "entity"{tuple_delimiter}MARTIN SMITH{tuple_delimiter}PERSON{tuple_delimiter}Martin Smith is the chair of the Central Institution
+    {record_delimiter}
+    "entity"{tuple_delimiter}MARKET STRATEGY COMMITTEE{tuple_delimiter}ORGANIZATION{tuple_delimiter}The Central Institution committee makes key decisions about interest rates and the growth of Verdantis's money supply
+    {completion_delimiter}

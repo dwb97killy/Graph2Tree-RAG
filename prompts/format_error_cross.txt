@@ -1,0 +1,5 @@
+Your previous output does NOT strictly adhere to the required output format, or some entities and relationships were missed in the last extraction. Please modify your previous output to match the required format exactly.
+    (1) Check the correct use of {BEG}, {END}, {SEP} and {RECORD_SEP}).
+    (2) Check that each entity only contains THREE {SEP}.
+    (3) Check that each relation only contains THREE {SEP}
+    (3) Check that each relation is followed by an entity

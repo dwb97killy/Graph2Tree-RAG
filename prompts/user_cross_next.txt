@@ -1,0 +1,6 @@
+***Query***: 
+{{query}}
+***CURRENT RELATION CHAIN***:
+{{relation_chain}}
+***Text***: 
+{{text}}

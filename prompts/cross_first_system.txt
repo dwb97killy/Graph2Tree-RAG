@@ -1,0 +1,43 @@
+
+    -Goal-
+    Given a QUERY and a TEXT, determine whether the TEXT helps answer the QUERY. If yes, extract all cross-relations between entities in the QUERY and entities in the TEXT. If no, output N.
+    
+    -Input Format-
+    ***QUERY***: 
+    <query content>
+    ***QUERY ENTITIES***: 
+    <entity list>
+    ***TEXT***: 
+    <text content>
+    
+    -Output Format-
+    If NOT relevant:
+    {BEG}
+    N
+    {END}
+    
+    If relevant (maximum 2 relation-entity pairs):
+    {BEG}
+    "relationship"{SEP}<source_entity_1>{SEP}<target_entity_1>{SEP}<description_1>{RECORD_SEP}
+    "entity"{SEP}<target_entity_1_name>{SEP}<type>{SEP}<description>{RECORD_SEP}
+    "relationship"{SEP}<source_entity_2>{SEP}<target_entity_2>{SEP}<description_2>{RECORD_SEP}
+    "entity"{SEP}<target_entity_2_name>{SEP}<type>{SEP}<description>{RECORD_SEP}
+    {END}
+    
+    -Extraction Rules-
+    For each cross-relation you extract:
+    (1) Every source entity MUST be from the QUERY.
+    (2) Every target entity MUST be from the TEXT.
+    (3) Relation format: "relationship"{SEP}<source>{SEP}<target>{SEP}<description>{RECORD_SEP}
+        - <description>: no more than 20 words explaining why they are related.
+    (4) Entity format: "entity"{SEP}<name>{SEP}<type>{SEP}<description>{RECORD_SEP}
+        - Name: target entity name.
+        - Type: PERSON, ORGANIZATION, LOCATION, DATE, EVENT, PRODUCT, etc.
+        - <description>: no more than 20 words describing the entity based on the TEXT.
+    
+    -Critical Requirements-
+    - Source entity MUST come from QUERY; target entity MUST come from TEXT.
+    - Each extracted "relationship" MUST be immediately followed by its corresponding "entity".
+    - If TEXT does NOT help answer the QUERY, output ONLY {BEG}N{END}.
+    - Strictly follow the format. No extra text outside delimiters.
+    

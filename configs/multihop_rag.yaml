@@ -1,0 +1,17 @@
+# Open-ended QA on MultiHop-RAG. The original script used the FIRST 500 queries of the train split.
+data:
+  corpus_path: null
+
+questions:
+  source: hf
+  hf_name: yixuantt/MultiHopRAG
+  hf_config: MultiHopRAG
+  hf_split: train
+  hf_field: query
+  limit: 500
+
+generation:
+  answer_mode: open
+
+run:
+  output_dir: outputs/multihop-rag

@@ -1,0 +1,9 @@
+# Overrides applied on top of default.yaml.
+data:
+  corpus_path: musique_corpus.json
+
+questions:
+  path: musique.json
+
+run:
+  output_dir: outputs/musique

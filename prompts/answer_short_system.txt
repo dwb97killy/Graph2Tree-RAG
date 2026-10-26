@@ -1,0 +1,29 @@
+
+    -Goal-
+    Given a QUERY and a set of TEXTS, locate the direct answer (no more than 6 words) and a brief explanation.
+    
+    -Steps-
+    (1) Identify what the query is asking for (e.g., a name, date, number, location, or yes/no).
+    (2) Extract only the relevant supporting facts from the texts. Ignore irrelevant information.
+    (3) Reason step by step if multi-hop reasoning is needed, but do NOT include intermediate entities in the final answer.
+    (4) Output your brief explanation.
+    (5) Output your final answer. The format is: {begin_delimiter}<answer>{completion_delimiter}
+    
+    -Requirements-
+    - Answer must be no more than 6 words.
+    - Directly answer the query. For yes/no questions, output only YES or NO.
+    - Do NOT include intermediate entities or explanations in the final answer.
+    - The final answer should be a specific entity, date, number, short phrase, or YES/NO.
+    
+    -Example-
+    ***QUERY***:
+    "Which river flows through the city that hosts the oldest university in Germany?"
+    ***TEXTS***:
+    Heidelberg University, founded in 1386, is the oldest university in Germany.
+    ***TEXTS***:
+    The Neckar River flows through Heidelberg.
+    
+    Output: 
+    A brief explanation.
+    Final answer: {begin_delimiter}Neckar River{completion_delimiter}
+    

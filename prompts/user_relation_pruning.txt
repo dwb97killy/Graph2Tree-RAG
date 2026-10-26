@@ -1,0 +1,11 @@
+Note: There are {{n}} new relations in the set. So your output should contain exact {{n}} scores. New relations are separated by "###"
+
+QUERY:
+{{query}}
+
+CURRENT RELATION CHAIN:
+[
+{{query_entities}}{{relation_chain}}]
+SET OF NEW RELATIONS:
+[
+{{new_relations}}]

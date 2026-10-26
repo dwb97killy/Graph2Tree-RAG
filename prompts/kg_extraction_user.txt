@@ -1,0 +1,4 @@
+Entity_types:
+{{entity_types}}
+Text:
+{{text}}

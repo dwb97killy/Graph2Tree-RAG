@@ -1,0 +1,9 @@
+# Overrides applied on top of default.yaml.
+data:
+  corpus_path: hotpotqa_corpus.json    # passages to index (step 1)
+
+questions:
+  path: hotpotqa.json                  # HippoRAG sample file: list of {"question": ..., ...}
+
+run:
+  output_dir: outputs/hotpotqa

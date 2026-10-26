@@ -1,0 +1,10 @@
+# Versions the code was run with.
+torch==2.8.0              # CUDA 12.8 build (2.8.0+cu128); install from the matching PyTorch index
+transformers==4.56.1
+sentence-transformers==5.1.0
+faiss-cpu==1.13.2         # use faiss-gpu if you have it installed instead
+langchain==0.1.17         # provides langchain.text_splitter.RecursiveCharacterTextSplitter
+numpy==2.2.6
+pyyaml==6.0.2
+openai==2.16.0            # only for llm.backend=openai
+datasets==4.5.0           # only for questions.source=hf (MultiHop-RAG)
